@@ -7,7 +7,7 @@ import stylesGlobal from "../styles/styles";
 export default class CardCustom extends Component {
   render() {
     return (
-      <View style={[stylesCard.container]}>
+      <View style={[stylesCard.container, this.props.style]}>
         <View style={{ flex: 0.5 }}>
           <Text
             style={[stylesCard.text, stylesCard.textTypeSensor]}
@@ -33,7 +33,6 @@ export default class CardCustom extends Component {
 }
 const stylesCard = StyleSheet.create({
   container: {
-    backgroundColor: "#48592266",
     flexDirection: "row",
     padding: 20,
     borderRadius: 10,

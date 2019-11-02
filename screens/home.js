@@ -48,6 +48,11 @@ class Home extends React.Component {
             action={() => this.props.navigation.navigate("Monitoring")}
             textButton="Monitorar minha residência"
           />
+          <Botao
+            // style={{ marginBottom: 20, marginTop: 10 }}
+            action={() => this.props.navigation.navigate("Statistics")}
+            textButton="Gráficos"
+          />
         </View>
         {/* </Animatable.View> */}
 

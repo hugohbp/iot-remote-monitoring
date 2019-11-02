@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Text, TouchableHighlight } from "react-native";
-import styles from "../styles/styles";
+import stylesGlobal from "../styles/styles";
 
-const Botao = ({ route, textButton, action }) => (
-  <TouchableHighlight style={styles.button} onPress={action}>
-    <Text style={styles.textButton} accessibilityLabel={`${textButton}`}>
+const Botao = ({ route, textButton, action, style }) => (
+  <TouchableHighlight style={[stylesGlobal.button, style]} onPress={action}>
+    <Text style={stylesGlobal.textButton} accessibilityLabel={`${textButton}`}>
       {textButton}
     </Text>
   </TouchableHighlight>

@@ -43,10 +43,16 @@ export class MonitoringComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sensorValues: new SensorValues()
+      sensorValues: new SensorValues(),
+      backgroundColorTemp: "#48592266",
+      backgroundColorMQ7: "#48592266"
     };
     // sensorValues = firebaseService.getLastInformationFromSensors();
     // console.log(sensorValues);
+
+    setTimeout(() => {
+      this.setState({ backgroundColor: "#990000" });
+    }, 3000);
 
     firebaseDatabase
       .ref("dados/sensors/")
@@ -55,16 +61,23 @@ export class MonitoringComponent extends Component {
       .on("child_added", snap => {
         console.log("teste", snap.val());
         this.setState({ sensorValues: snap.val() });
+        if (this.state.sensorValues.mq7.ppm > 55) {
+          this.setState({ backgroundColorMQ7: "#990000" });
+        } else {
+          this.setState({ backgroundColorMQ7: "#48592266" });
+        }
+
+        if (this.state.sensorValues.dht22.temperature > 50) {
+          this.setState({ backgroundColorTemp: "#990000" });
+        } else {
+          this.setState({ backgroundColorTemp: "#48592266" });
+        }
       });
   }
 
   render() {
     if (this.state.sensorValues) {
       return (
-        // <View styles={[stylesComponent.container, { flexDirection: "row" }]}>
-        //   {/* <CardCustom typeSensor="DHT" description="aaaa"></CardCustom> */}
-
-        // </View>
         <View
           style={[
             {
@@ -78,6 +91,7 @@ export class MonitoringComponent extends Component {
           <Text style={stylesComponent.text}>Temperatura:</Text>
 
           <CardCustom
+            style={{ backgroundColor: `${this.state.backgroundColorTemp}` }}
             typeSensor="DHT11"
             description={[
               this.state.sensorValues.dht11.temperature + " ºC",
@@ -85,6 +99,7 @@ export class MonitoringComponent extends Component {
             ]}
           ></CardCustom>
           <CardCustom
+            style={{ backgroundColor: `${this.state.backgroundColorTemp}` }}
             typeSensor="DHT22"
             description={[
               this.state.sensorValues.dht22.temperature + " ºC",
@@ -94,6 +109,7 @@ export class MonitoringComponent extends Component {
           <Text style={stylesComponent.text}>Qualidade do ar:</Text>
 
           <CardCustom
+            style={{ backgroundColor: `${this.state.backgroundColorMQ7}` }}
             typeSensor="MQ7"
             description={[
               this.state.sensorValues.mq7.analog + " (valor analógico)",
@@ -101,6 +117,7 @@ export class MonitoringComponent extends Component {
             ]}
           ></CardCustom>
           <CardCustom
+            style={{ backgroundColor: "#48592266" }}
             typeSensor="MQ2"
             description={[
               this.state.sensorValues.mq2.analog + " (valor analógico)",
@@ -108,6 +125,12 @@ export class MonitoringComponent extends Component {
               this.state.sensorValues.mq2.lpg + " (LPG) p.p.m."
             ]}
           ></CardCustom>
+          {this.state.sensorValues.dht22.temperature > 50 ? (
+            <Text style={stylesComponent.text}>Alerta: alta temperatura</Text>
+          ) : null}
+          {this.state.sensorValues.mq7.ppm > 55 ? (
+            <Text style={stylesComponent.text}>Alerta: aumento de CO</Text>
+          ) : null}
         </View>
       );
     } else {
